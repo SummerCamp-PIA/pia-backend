@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/hotel")
@@ -32,7 +33,8 @@ public class HotelController {
     }
 
     @GetMapping
-    public ResponseEntity<List<HotelResponse>> getAllHotels(){
-        return ResponseEntity.ok(hotelService.getAllHotels());
+    public ResponseEntity<List<HotelResponse>> getAllHotels(@RequestParam Map<String, String> params){
+
+        return ResponseEntity.ok(hotelService.getAllHotels(params));
     }
 }

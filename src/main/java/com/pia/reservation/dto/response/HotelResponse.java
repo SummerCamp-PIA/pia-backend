@@ -20,5 +20,5 @@ public class HotelResponse {
     private String amentities;
     private Integer avgScore;
 
-    private Offer offer;
+   // private Offer offer;
 }

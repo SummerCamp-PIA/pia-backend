@@ -10,12 +10,15 @@ import com.pia.reservation.model.Room;
 import com.pia.reservation.repository.HotelRepository;
 import com.pia.reservation.repository.LocationRepository;
 import com.pia.reservation.util.ModelMapperUtil;
+import com.pia.reservation.util.SpecificationBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static com.pia.reservation.util.ModelMapperUtil.modelMapper;
@@ -57,9 +60,11 @@ public class HotelService {
         }
     }
 
-    public List<HotelResponse> getAllHotels(){
+    public List<HotelResponse> getAllHotels(Map<String,String> params){
+        SpecificationBuilder<Hotel> builder = new SpecificationBuilder<>();
+        Specification<Hotel> spec = builder.build(params);
 
-        List<Hotel> hotels = hotelRepository.findAll();
+        List<Hotel> hotels = hotelRepository.findAll(spec);
         List<HotelResponse> hotelResponse = hotels.stream()
                 .map(hotel -> modelMapper.map(hotel, HotelResponse.class))
                 .collect(Collectors.toList());
