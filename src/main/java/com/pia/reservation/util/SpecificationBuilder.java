@@ -2,6 +2,7 @@ package com.pia.reservation.util;
 
 import com.pia.reservation.model.Hotel;
 import com.pia.reservation.model.Location;
+import com.pia.reservation.model.Reservation;
 import jakarta.persistence.criteria.*;
 import org.springframework.data.jpa.domain.Specification;
 
@@ -28,6 +29,9 @@ public class SpecificationBuilder<T> {
                     case "country":
                         Join<Hotel, Location> locationJoin = root.join("location");
                         predicates.add(criteriaBuilder.equal(locationJoin.get(key), value));
+                        Join<Hotel, Reservation> reservationJoin = root.join("reservation");
+
+
                         break;
                     case "amentities":
                         String[] amenitiesArray = value.split(",");

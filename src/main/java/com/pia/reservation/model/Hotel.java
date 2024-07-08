@@ -21,11 +21,15 @@ public class Hotel {
 
     private String name;
 
-    private String hotelType;
-    private String accomudationType;
+    private String hotelType; // single
+    private String accomudationType; // single
+    private Integer accomudatipnTypePrice;
+
     private String amentities;
 
     private Integer avgScore = 0;
+
+    private Integer star;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "location_id")

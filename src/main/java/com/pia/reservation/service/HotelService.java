@@ -71,6 +71,22 @@ public class HotelService {
         return hotelResponse;
     }
 
+    public HotelResponse getHotelById(Long id){
+
+
+        Hotel hotel = hotelRepository.findById(id).orElseThrow();
+
+
+        List<RoomDto> roomDtos = new ArrayList<>();
+        for(Room room : hotel.getRooms()){
+            roomDtos.add(modelMapper.map(room, RoomDto.class));
+        }
+        HotelResponse hotelResponse = modelMapper.map(hotel, HotelResponse.class);
+        hotelResponse.setRooms(roomDtos);
+
+        return hotelResponse;
+    }
+
     /*public HotelDetailResponse getHotel(Long hotelId, Date startDate, Date endDate){
        Hotel hotel =  hotelRepository.findById(hotelId).orElseThrow();
 

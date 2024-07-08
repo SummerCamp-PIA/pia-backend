@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -18,10 +19,15 @@ public class Room {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private Integer roomNo;
     private String roomType;
     private Integer price;
-    private Integer totalRoomCount;
     private Integer maxOccupancy;
+    private Integer bedNo;
+    private String roomAmentites;
+
+    private Date checkInDate;
+    private Date checkOutDate;
 
     @ManyToOne
     @JoinColumn(name = "hotel_id")
