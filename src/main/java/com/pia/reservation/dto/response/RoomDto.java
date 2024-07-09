@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Schema(description = "Room data transfer object for hotel response")
 @Data
 @Builder
@@ -18,8 +20,14 @@ public class RoomDto {
     private String roomType;
 
     @Schema(description = "Number of rooms of this type", example = "10")
-    private Integer roomCount;
+    private Integer totalRoomCount;
 
     @Schema(description = "Price of the room per night", example = "150")
     private Integer roomPrice;
+
+    private Integer bedNo;
+
+    private String roomAmentites;
+
+    private Integer maxOccupancy;
 }
