@@ -41,6 +41,9 @@ public class Hotel {
     @OneToMany(mappedBy = "hotel")
     private List<Review> reviews;
 
+    @OneToMany(mappedBy = "hotel")
+    private List<File> images;
+
     private String email;
     private String phoneNo;
 
