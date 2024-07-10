@@ -35,10 +35,8 @@ public class ReservationService {
 
     @Autowired
     private HotelRepository hotelRepository;
-    @Transactional
-    public void save(ReservationSaveRequestDto reservationSaveRequestDto) {
 
-
+    public Room findAvailableRooms(ReservationSaveRequestDto reservationSaveRequestDto) {
         Optional<Hotel> hotelOptional = hotelRepository.findById(reservationSaveRequestDto.getHotel_id());
         if (!hotelOptional.isPresent()) {
             throw new RuntimeException("Hotel not found");
@@ -51,38 +49,96 @@ public class ReservationService {
                 Date.valueOf(reservationSaveRequestDto.getCheckInDate()),
                 Date.valueOf(reservationSaveRequestDto.getCheckOutDate())
         );
-
-        System.out.println(reservationSaveRequestDto.getRoomAmentites());
         if (room.getFirst() == null) {
             throw new NoSuchElementException("No available room found");
 
         }
-
+        return room.getFirst();
+    }
+    public void saveGuest(ReservationSaveRequestDto reservationSaveRequestDto) {
         for (Guest guest : reservationSaveRequestDto.getGuests()) {
             guest = modelMapper.map(guest, Guest.class);
             System.out.println(guest.toString());
+            System.out.println(guest.getReservation());
             guestRepository.save(guest);
         }
+
+    }
+    public  Reservation saveReservation(Room room,ReservationSaveRequestDto reservationSaveRequestDto) {
         Reservation reservation = new Reservation();
-        System.out.println(room.size());
-
-        reservation.setRoom(room.getFirst());
+        reservation.setRoom(room);
         reservation.setCheckInDate(Date.valueOf(reservationSaveRequestDto.getCheckInDate()));
-        reservation.setCheckOutDate(Date .valueOf(reservationSaveRequestDto.getCheckOutDate()));
+        reservation.setCheckOutDate(Date.valueOf(reservationSaveRequestDto.getCheckOutDate()));
         reservationRepository.save(reservation);
+        return reservation;
+    }
+    public void saveRoomByreservation(Room room,ReservationSaveRequestDto reservationSaveRequestDto){
+        room.setCheckInDate(Date.valueOf(reservationSaveRequestDto.getCheckInDate()));
+        room.setCheckOutDate(Date.valueOf(reservationSaveRequestDto.getCheckOutDate()));
+        roomRepository.save(room);
 
-        // Dto ?
-        Room roomDto = modelMapper.map(room.getFirst(), Room.class);
-        roomDto.setCheckInDate(Date.valueOf(reservationSaveRequestDto.getCheckInDate()));
-        roomDto.setCheckOutDate(Date.valueOf(reservationSaveRequestDto.getCheckOutDate()));
-        roomRepository.save(roomDto);
-
-
-
+    }
+    @Transactional
+    public void save(ReservationSaveRequestDto reservationSaveRequestDto) {
+        Room availableRoom = findAvailableRooms(reservationSaveRequestDto);
+        saveGuest(reservationSaveRequestDto);
+        Reservation reservation = saveReservation(availableRoom,reservationSaveRequestDto);
+        saveRoomByreservation(availableRoom,reservationSaveRequestDto);
         for(Guest guest: reservationSaveRequestDto.getGuests()){
-            guest.setReservation(reservation);
+                guest.setReservation(reservation);
             guestRepository.save(guest);
-        }
+       }
+
+
+
+
+
+
+
+//        Optional<Hotel> hotelOptional = hotelRepository.findById(reservationSaveRequestDto.getHotel_id());
+//        if (!hotelOptional.isPresent()) {
+//            throw new RuntimeException("Hotel not found");
+//        }
+//        Hotel hotel = hotelOptional.get();
+//        List<Room> room = roomRepository.findAvailableRoom(
+//                hotel.getHotel_id(),
+//                reservationSaveRequestDto.getRoomType(),
+//                reservationSaveRequestDto.getRoomAmentites(),
+//                Date.valueOf(reservationSaveRequestDto.getCheckInDate()),
+//                Date.valueOf(reservationSaveRequestDto.getCheckOutDate())
+//        );
+//
+//        System.out.println(reservationSaveRequestDto.getRoomAmentites());
+//        if (room.getFirst() == null) {
+//            throw new NoSuchElementException("No available room found");
+//
+//        }
+//
+//        for (Guest guest : reservationSaveRequestDto.getGuests()) {
+//            guest = modelMapper.map(guest, Guest.class);
+//            System.out.println(guest.toString());
+//            System.out.println(guest.getReservation());
+//            guestRepository.save(guest);
+//        }
+//        Reservation reservation = new Reservation();
+//        System.out.println(room.size());
+//
+//        reservation.setRoom(room.getFirst());
+//        reservation.setCheckInDate(Date.valueOf(reservationSaveRequestDto.getCheckInDate()));
+//        reservation.setCheckOutDate(Date .valueOf(reservationSaveRequestDto.getCheckOutDate()));
+//        reservationRepository.save(reservation);
+//
+//       Room savedRoom = room.getFirst();
+//       savedRoom.setCheckInDate(Date.valueOf(reservationSaveRequestDto.getCheckInDate()));
+//        savedRoom.setCheckOutDate(Date.valueOf(reservationSaveRequestDto.getCheckOutDate()));
+//        roomRepository.save(savedRoom);
+//
+//
+//
+//        for(Guest guest: reservationSaveRequestDto.getGuests()){
+//            guest.setReservation(reservation);
+//            guestRepository.save(guest);
+//        }
 
  }
 }
