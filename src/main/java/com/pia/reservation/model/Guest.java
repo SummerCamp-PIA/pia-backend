@@ -15,7 +15,7 @@ import java.util.Date;
 public class Guest {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long guest_id;
 
     private String name;
     private String surname;

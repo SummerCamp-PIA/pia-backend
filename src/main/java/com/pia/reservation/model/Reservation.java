@@ -16,7 +16,7 @@ import java.util.List;
 public class Reservation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long reservation_id;
 
     private Date checkInDate;
     private Date checkOutDate;
