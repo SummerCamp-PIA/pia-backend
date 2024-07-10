@@ -71,6 +71,7 @@ public class ReservationService {
         reservation.setCheckOutDate(Date .valueOf(reservationSaveRequestDto.getCheckOutDate()));
         reservationRepository.save(reservation);
 
+        // Dto ?
         Room roomDto = modelMapper.map(room.getFirst(), Room.class);
         roomDto.setCheckInDate(Date.valueOf(reservationSaveRequestDto.getCheckInDate()));
         roomDto.setCheckOutDate(Date.valueOf(reservationSaveRequestDto.getCheckOutDate()));
