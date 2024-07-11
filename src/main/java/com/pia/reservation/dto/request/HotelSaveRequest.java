@@ -1,8 +1,12 @@
 package com.pia.reservation.dto.request;
 
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.pia.reservation.dto.request.SubDto.HotelSaveLocationDto;
+import com.pia.reservation.dto.request.SubDto.RoomDto;
 import com.pia.reservation.model.Location;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,6 +22,7 @@ import java.util.List;
 public class HotelSaveRequest {
 
     @Schema(description = "Hotel's name", example = "Grand Plaza")
+    @JsonProperty("hotelName")
     private String name;
 
     @Schema(description = "Type of the hotel", example = "Resort")
@@ -30,10 +35,19 @@ public class HotelSaveRequest {
     private List<String> amentities;
 
     @Schema(description = "Location details of the hotel")
-    private Location location;
+    @JsonProperty("location")
+    private HotelSaveLocationDto location;
 
     @Schema(description = "List of room details")
     private List<RoomDto> rooms;
+
+    @JsonProperty("starRating")
+    private Integer star;
+
+    @JsonProperty("phone")
+    private String phoneNo;
+    @JsonProperty("email")
+    private String email;
 
     private int accomudatipnTypePrice;
 }

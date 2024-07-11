@@ -13,12 +13,9 @@ import jakarta.mail.MessagingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.swing.text.DateFormatter;
-import java.text.DateFormat;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
-import java.util.concurrent.ThreadPoolExecutor;
 
 @Service
 public class PaymentService {
@@ -82,5 +79,33 @@ public class PaymentService {
         else{
             return false;
         }
+    }
+
+
+    public PaymentResponse getPaymentById(Long id){
+        Optional<Payment> payment = paymentRepository.findById(id);
+
+        String cencoredCardNo = "";
+        String crediCardNo =  payment.get().getCreditCard().getCardNo();
+
+        String last4Digits =crediCardNo.substring(crediCardNo.length() - 4);
+
+        for(int i = 1; i<=payment.get().getCreditCard().getCardNo().length()-4; i++){
+            cencoredCardNo += "*";
+            if(i%4 == 0){
+                cencoredCardNo += "-";
+            }
+
+        }
+
+        cencoredCardNo += last4Digits;
+
+        PaymentResponse paymentResponse = PaymentResponse.builder()
+                .amount(payment.get().getAmount())
+                .userName(payment.get().getUserName())
+                .creditCardNo(cencoredCardNo)
+                .build();
+
+        return paymentResponse;
     }
 }

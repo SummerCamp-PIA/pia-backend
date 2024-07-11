@@ -1,4 +1,4 @@
-package com.pia.reservation.dto.request;
+package com.pia.reservation.dto.request.SubDto;
 
 
 import io.swagger.v3.oas.annotations.media.Schema;

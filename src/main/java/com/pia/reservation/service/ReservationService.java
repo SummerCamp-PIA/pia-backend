@@ -1,7 +1,7 @@
 package com.pia.reservation.service;
 
 
-import com.pia.reservation.dto.request.ReservationSaveRequestDto;
+import com.pia.reservation.dto.request.ReservationSaveRequest;
 import com.pia.reservation.model.Guest;
 import com.pia.reservation.model.Hotel;
 import com.pia.reservation.model.Reservation;
@@ -36,18 +36,18 @@ public class ReservationService {
     @Autowired
     private HotelRepository hotelRepository;
 
-    public Room findAvailableRooms(ReservationSaveRequestDto reservationSaveRequestDto) {
-        Optional<Hotel> hotelOptional = hotelRepository.findById(reservationSaveRequestDto.getHotel_id());
+    public Room findAvailableRooms(ReservationSaveRequest reservationSaveRequest) {
+        Optional<Hotel> hotelOptional = hotelRepository.findById(reservationSaveRequest.getHotel_id());
         if (!hotelOptional.isPresent()) {
             throw new RuntimeException("Hotel not found");
         }
         Hotel hotel = hotelOptional.get();
         List<Room> room = roomRepository.findAvailableRoom(
                 hotel.getHotel_id(),
-                reservationSaveRequestDto.getRoomType(),
-                reservationSaveRequestDto.getRoomAmentites(),
-                Date.valueOf(reservationSaveRequestDto.getCheckInDate()),
-                Date.valueOf(reservationSaveRequestDto.getCheckOutDate())
+                reservationSaveRequest.getRoomType(),
+                reservationSaveRequest.getRoomAmentites(),
+                Date.valueOf(reservationSaveRequest.getCheckInDate()),
+                Date.valueOf(reservationSaveRequest.getCheckOutDate())
         );
         if (room.getFirst() == null) {
             throw new NoSuchElementException("No available room found");
@@ -55,8 +55,8 @@ public class ReservationService {
         }
         return room.getFirst();
     }
-    public void saveGuest(ReservationSaveRequestDto reservationSaveRequestDto) {
-        for (Guest guest : reservationSaveRequestDto.getGuests()) {
+    public void saveGuest(ReservationSaveRequest reservationSaveRequest) {
+        for (Guest guest : reservationSaveRequest.getGuests()) {
             guest = modelMapper.map(guest, Guest.class);
             System.out.println(guest.toString());
             System.out.println(guest.getReservation());
@@ -64,27 +64,27 @@ public class ReservationService {
         }
 
     }
-    public  Reservation saveReservation(Room room,ReservationSaveRequestDto reservationSaveRequestDto) {
+    public  Reservation saveReservation(Room room, ReservationSaveRequest reservationSaveRequest) {
         Reservation reservation = new Reservation();
         reservation.setRoom(room);
-        reservation.setCheckInDate(Date.valueOf(reservationSaveRequestDto.getCheckInDate()));
-        reservation.setCheckOutDate(Date.valueOf(reservationSaveRequestDto.getCheckOutDate()));
+        reservation.setCheckInDate(Date.valueOf(reservationSaveRequest.getCheckInDate()));
+        reservation.setCheckOutDate(Date.valueOf(reservationSaveRequest.getCheckOutDate()));
         reservationRepository.save(reservation);
         return reservation;
     }
-    public void saveRoomByreservation(Room room,ReservationSaveRequestDto reservationSaveRequestDto){
-        room.setCheckInDate(Date.valueOf(reservationSaveRequestDto.getCheckInDate()));
-        room.setCheckOutDate(Date.valueOf(reservationSaveRequestDto.getCheckOutDate()));
+    public void saveRoomByreservation(Room room, ReservationSaveRequest reservationSaveRequest){
+        room.setCheckInDate(Date.valueOf(reservationSaveRequest.getCheckInDate()));
+        room.setCheckOutDate(Date.valueOf(reservationSaveRequest.getCheckOutDate()));
         roomRepository.save(room);
 
     }
     @Transactional
-    public void save(ReservationSaveRequestDto reservationSaveRequestDto) {
-        Room availableRoom = findAvailableRooms(reservationSaveRequestDto);
-        saveGuest(reservationSaveRequestDto);
-        Reservation reservation = saveReservation(availableRoom,reservationSaveRequestDto);
-        saveRoomByreservation(availableRoom,reservationSaveRequestDto);
-        for(Guest guest: reservationSaveRequestDto.getGuests()){
+    public void save(ReservationSaveRequest reservationSaveRequest) {
+        Room availableRoom = findAvailableRooms(reservationSaveRequest);
+        saveGuest(reservationSaveRequest);
+        Reservation reservation = saveReservation(availableRoom, reservationSaveRequest);
+        saveRoomByreservation(availableRoom, reservationSaveRequest);
+        for(Guest guest: reservationSaveRequest.getGuests()){
             guest.setReservation(reservation);
             guestRepository.save(guest);
        }
@@ -95,26 +95,26 @@ public class ReservationService {
 
 
 
-//        Optional<Hotel> hotelOptional = hotelRepository.findById(reservationSaveRequestDto.getHotel_id());
+//        Optional<Hotel> hotelOptional = hotelRepository.findById(reservationSaveRequest.getHotel_id());
 //        if (!hotelOptional.isPresent()) {
 //            throw new RuntimeException("Hotel not found");
 //        }
 //        Hotel hotel = hotelOptional.get();
 //        List<Room> room = roomRepository.findAvailableRoom(
 //                hotel.getHotel_id(),
-//                reservationSaveRequestDto.getRoomType(),
-//                reservationSaveRequestDto.getRoomAmentites(),
-//                Date.valueOf(reservationSaveRequestDto.getCheckInDate()),
-//                Date.valueOf(reservationSaveRequestDto.getCheckOutDate())
+//                reservationSaveRequest.getRoomType(),
+//                reservationSaveRequest.getRoomAmentites(),
+//                Date.valueOf(reservationSaveRequest.getCheckInDate()),
+//                Date.valueOf(reservationSaveRequest.getCheckOutDate())
 //        );
 //
-//        System.out.println(reservationSaveRequestDto.getRoomAmentites());
+//        System.out.println(reservationSaveRequest.getRoomAmentites());
 //        if (room.getFirst() == null) {
 //            throw new NoSuchElementException("No available room found");
 //
 //        }
 //
-//        for (Guest guest : reservationSaveRequestDto.getGuests()) {
+//        for (Guest guest : reservationSaveRequest.getGuests()) {
 //            guest = modelMapper.map(guest, Guest.class);
 //            System.out.println(guest.toString());
 //            System.out.println(guest.getReservation());
@@ -124,18 +124,18 @@ public class ReservationService {
 //        System.out.println(room.size());
 //
 //        reservation.setRoom(room.getFirst());
-//        reservation.setCheckInDate(Date.valueOf(reservationSaveRequestDto.getCheckInDate()));
-//        reservation.setCheckOutDate(Date .valueOf(reservationSaveRequestDto.getCheckOutDate()));
+//        reservation.setCheckInDate(Date.valueOf(reservationSaveRequest.getCheckInDate()));
+//        reservation.setCheckOutDate(Date .valueOf(reservationSaveRequest.getCheckOutDate()));
 //        reservationRepository.save(reservation);
 //
 //       Room savedRoom = room.getFirst();
-//       savedRoom.setCheckInDate(Date.valueOf(reservationSaveRequestDto.getCheckInDate()));
-//        savedRoom.setCheckOutDate(Date.valueOf(reservationSaveRequestDto.getCheckOutDate()));
+//       savedRoom.setCheckInDate(Date.valueOf(reservationSaveRequest.getCheckInDate()));
+//        savedRoom.setCheckOutDate(Date.valueOf(reservationSaveRequest.getCheckOutDate()));
 //        roomRepository.save(savedRoom);
 //
 //
 //
-//        for(Guest guest: reservationSaveRequestDto.getGuests()){
+//        for(Guest guest: reservationSaveRequest.getGuests()){
 //            guest.setReservation(reservation);
 //            guestRepository.save(guest);
 //        }

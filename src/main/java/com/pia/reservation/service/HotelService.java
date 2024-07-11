@@ -1,24 +1,20 @@
 package com.pia.reservation.service;
 
 import com.pia.reservation.dto.request.HotelSaveRequest;
-import com.pia.reservation.dto.response.HotelDetailResponse;
 import com.pia.reservation.dto.response.HotelResponse;
 import com.pia.reservation.dto.response.Offer;
 import com.pia.reservation.dto.response.RoomDto;
 import com.pia.reservation.model.Hotel;
-import com.pia.reservation.model.Location;
 import com.pia.reservation.model.Room;
 import com.pia.reservation.repository.HotelRepository;
 import com.pia.reservation.repository.LocationRepository;
 import com.pia.reservation.repository.RoomRepository;
-import com.pia.reservation.util.ModelMapperUtil;
 import com.pia.reservation.util.SpecificationBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -52,7 +48,7 @@ public class HotelService {
         List<Room> roomInstances = new ArrayList<>();
         System.out.println(hotelSaveRequest.getRooms());
         // Iterate over the room DTOs and create multiple instances based on roomCount
-        for (com.pia.reservation.dto.request.RoomDto roomDto : hotelSaveRequest.getRooms()) {
+        for (com.pia.reservation.dto.request.SubDto.RoomDto roomDto : hotelSaveRequest.getRooms()) {
             System.out.println("RoomDto: " + roomDto);
 
             for (int i = 0; i < roomDto.getTotalRoomCount(); i++) {

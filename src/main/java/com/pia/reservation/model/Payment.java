@@ -28,4 +28,6 @@ public class Payment {
 
     private String hotelName;
     private String userName;
+
+    private Integer amount;
 }

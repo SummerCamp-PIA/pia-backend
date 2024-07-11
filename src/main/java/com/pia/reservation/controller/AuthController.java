@@ -38,6 +38,7 @@ public class AuthController {
     public ResponseEntity<String> registerUser(@RequestBody User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setRole(Role.USER);
+        user.setUsername(user.getEmail());
         userRepository.save(user);
         return ResponseEntity.ok("User registered successfully");
     }
