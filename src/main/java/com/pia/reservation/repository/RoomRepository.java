@@ -21,4 +21,8 @@ List<Room> findAvailableRoom(@Param("hotel_id") Long hotelId,
                              @Param("checkInDate") Date checkInDate,
                              @Param("checkOutDate") Date checkOutDate
                            );
+    @Query("SELECT min(r.price) FROM Room r WHERE r.hotel.hotel_id = :hotelId")
+    Integer findMinPriceByHotelId(@Param("hotelId") Long hotelId);
+   List<Room>  findByRoomType(String roomType);
+
 }

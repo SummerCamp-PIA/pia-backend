@@ -61,4 +61,8 @@ public class HotelController {
     public ResponseEntity<HotelResponse> getHotel(@PathVariable Long id) {
         return ResponseEntity.ok(hotelService.getHotelById(id));
     }
+    @GetMapping("/offer")
+    public int getOffer(@RequestParam Long id, String roomType){
+        return hotelService.getOffer(id, roomType);
+    }
 }

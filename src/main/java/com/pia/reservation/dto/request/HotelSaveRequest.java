@@ -34,4 +34,6 @@ public class HotelSaveRequest {
 
     @Schema(description = "List of room details")
     private List<RoomDto> rooms;
+
+    private int accomudatipnTypePrice;
 }

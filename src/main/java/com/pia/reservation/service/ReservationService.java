@@ -85,7 +85,7 @@ public class ReservationService {
         Reservation reservation = saveReservation(availableRoom,reservationSaveRequestDto);
         saveRoomByreservation(availableRoom,reservationSaveRequestDto);
         for(Guest guest: reservationSaveRequestDto.getGuests()){
-                guest.setReservation(reservation);
+            guest.setReservation(reservation);
             guestRepository.save(guest);
        }
 

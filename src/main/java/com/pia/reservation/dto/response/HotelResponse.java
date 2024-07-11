@@ -31,4 +31,6 @@ public class HotelResponse {
     @Schema(description = "Average score of the hotel", example = "4")
     private Integer avgScore;
 
+    private Integer totalPrice;
+
 }

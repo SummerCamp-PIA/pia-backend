@@ -3,6 +3,7 @@ package com.pia.reservation.service;
 import com.pia.reservation.dto.request.HotelSaveRequest;
 import com.pia.reservation.dto.response.HotelDetailResponse;
 import com.pia.reservation.dto.response.HotelResponse;
+import com.pia.reservation.dto.response.Offer;
 import com.pia.reservation.dto.response.RoomDto;
 import com.pia.reservation.model.Hotel;
 import com.pia.reservation.model.Location;
@@ -86,22 +87,25 @@ public class HotelService {
         SpecificationBuilder<Hotel> builder = new SpecificationBuilder<>();
         Specification<Hotel> spec = builder.build(params);
         List<Hotel> hotels = hotelRepository.findAll(spec);
-        hotels.forEach(hotel -> {
-            System.out.println("Hotel: " + hotel.getName());
-            hotel.getRooms().forEach(room -> {
-                System.out.println("Room Type: " + room.getRoomType());
-                System.out.println("Room Amenities: " + room.getRoomAmentites());
-            });
-        });
 
         List<HotelResponse> hotelResponse = hotels.stream()
                 .map(hotel -> modelMapper.map(hotel, HotelResponse.class))
                 .collect(Collectors.toList());
+
+        for (int i = 0; i <hotelResponse.size() ; i++) {
+            Long hotel_id = hotels.get(i).getHotel_id();
+
+            Integer roomPrice = roomRepository.findMinPriceByHotelId(hotel_id);
+            System.out.println("Room Price: " + roomPrice);
+
+            int accomudationprice = hotels.get(i).getAccomudatipnTypePrice();
+            System.out.println("Accommodation Price: " + accomudationprice);
+            hotelResponse.get(i).setTotalPrice((int) (accomudationprice + roomPrice));
+        }
         return hotelResponse;
     }
 
     public HotelResponse getHotelById(Long id){
-
 
         Hotel hotel = hotelRepository.findById(id).orElseThrow();
 
@@ -110,10 +114,22 @@ public class HotelService {
         for(Room room : hotel.getRooms()){
             roomDtos.add(modelMapper.map(room, RoomDto.class));
         }
-        HotelResponse hotelResponse = modelMapper.map(hotel, HotelResponse.class);
 
+        HotelResponse hotelResponse = modelMapper.map(hotel, HotelResponse.class);
+//        hotelResponse.setTotalPrice(roomDtos.get(1).getRoomPrice());
 
         return hotelResponse;
+
+    }
+    public int getOffer(Long id, String roomType){
+        int totalPrice = 0;
+        List<Room> room = roomRepository.findByRoomType(roomType);
+
+        Hotel hotel = hotelRepository.findById(id).orElseThrow();
+        totalPrice = hotel.getAccomudatipnTypePrice();
+
+        totalPrice += room.getFirst().getPrice();
+        return totalPrice;
     }
 
     public Hotel getHotel(Long id){
