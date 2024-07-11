@@ -94,9 +94,11 @@ public class HotelService {
             Integer roomPrice = roomRepository.findMinPriceByHotelId(hotel_id);
             System.out.println("Room Price: " + roomPrice);
 
-            int accomudationprice = hotels.get(i).getAccomudatipnTypePrice();
-            System.out.println("Accommodation Price: " + accomudationprice);
-            hotelResponse.get(i).setTotalPrice((int) (accomudationprice + roomPrice));
+            Integer accomudationPrice = hotels.get(i).getAccomudatipnTypePrice();
+            int finalAccomudationPrice = (accomudationPrice != null) ? accomudationPrice : 0;
+
+            System.out.println("Accommodation Price: " + finalAccomudationPrice);
+            hotelResponse.get(i).setTotalPrice((int) (finalAccomudationPrice + roomPrice));
         }
         return hotelResponse;
     }
