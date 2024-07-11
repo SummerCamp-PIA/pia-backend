@@ -9,11 +9,13 @@ import com.pia.reservation.model.Room;
 import com.pia.reservation.repository.HotelRepository;
 import com.pia.reservation.repository.LocationRepository;
 import com.pia.reservation.repository.RoomRepository;
+import com.pia.reservation.util.FileService;
 import com.pia.reservation.util.SpecificationBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -35,9 +37,12 @@ public class HotelService {
     @Autowired
     private RoomRepository roomRepository;
 
+    @Autowired
+    private FileService fileService;
 
 
-    public void saveHotel(HotelSaveRequest hotelSaveRequest) {
+
+    public void saveHotel(HotelSaveRequest hotelSaveRequest) throws IOException {
         // Map the hotelSaveRequest to a Hotel entity
         Hotel hotel = modelMapper.map(hotelSaveRequest, Hotel.class);
 
@@ -61,6 +66,8 @@ public class HotelService {
 
         // Save all room instances
         roomRepository.saveAll(roomInstances);
+
+        fileService.saveFiles(hotelSaveRequest.getImages(),hotel);
 
         // Optionally update the hotel with the room references (if needed)
         hotel.setRooms(roomInstances);

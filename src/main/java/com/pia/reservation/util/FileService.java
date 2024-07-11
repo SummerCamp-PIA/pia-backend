@@ -33,9 +33,9 @@ public class FileService {
 
 
 
-    public void saveFiles(MultipartFile [] multipartFiles, Long hotelId) throws IOException {
+    public void saveFiles(MultipartFile [] multipartFiles, Hotel hotel) throws IOException {
 
-        Hotel hotel = hotelService.getHotel(hotelId);
+
 
         int hotelImageCount = hotel.getImages().size();
         if(hotel != null){

@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -38,7 +39,7 @@ public class HotelController {
             @ApiResponse(responseCode = "400", description = "Invalid input")
     })
     @PostMapping
-    public ResponseEntity<String> saveHotel(@RequestBody HotelSaveRequest hotelSaveRequest) {
+    public ResponseEntity<String> saveHotel(@RequestBody HotelSaveRequest hotelSaveRequest) throws IOException {
         hotelService.saveHotel(hotelSaveRequest);
         return ResponseEntity.ok("Hotel saved successfully");
     }

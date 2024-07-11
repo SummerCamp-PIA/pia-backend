@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -48,4 +49,7 @@ public class HotelSaveRequest {
     private String email;
 
     private int accomudatipnTypePrice;
+
+    @JsonProperty("hotelPhotos")
+    private MultipartFile [] images;
 }
