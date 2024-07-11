@@ -6,6 +6,7 @@ import com.pia.reservation.dto.response.HotelResponse;
 import com.pia.reservation.model.File;
 import com.pia.reservation.model.Hotel;
 import com.pia.reservation.repository.FileRepository;
+import com.pia.reservation.repository.HotelRepository;
 import com.pia.reservation.service.HotelService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,7 +30,7 @@ public class FileService {
     private FileRepository fileRepository;
 
     @Autowired
-    private HotelService hotelService;
+    private HotelRepository hotelRepository;
 
 
 
@@ -70,7 +71,7 @@ public class FileService {
 
 
     public List<FileResponse> getFiles(Long hotelId) throws IOException {
-        Hotel hotel = hotelService.getHotel(hotelId);
+        Hotel hotel = hotelRepository.findById(hotelId).orElseThrow();
         List<File> files = fileRepository.findAllByHotel(hotel);
 
 

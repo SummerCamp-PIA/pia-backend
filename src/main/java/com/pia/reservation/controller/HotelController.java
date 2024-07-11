@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
@@ -39,8 +40,8 @@ public class HotelController {
             @ApiResponse(responseCode = "400", description = "Invalid input")
     })
     @PostMapping
-    public ResponseEntity<String> saveHotel(@RequestBody HotelSaveRequest hotelSaveRequest) throws IOException {
-        hotelService.saveHotel(hotelSaveRequest);
+    public ResponseEntity<String> saveHotel(@RequestBody HotelSaveRequest hotelSaveRequest,@RequestParam("hotelPhotos") MultipartFile[] multipartFiles) throws IOException {
+        hotelService.saveHotel(hotelSaveRequest,multipartFiles);
         return ResponseEntity.ok("Hotel saved successfully");
     }
 

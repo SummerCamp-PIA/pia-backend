@@ -14,6 +14,7 @@ import com.pia.reservation.util.SpecificationBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -42,7 +43,7 @@ public class HotelService {
 
 
 
-    public void saveHotel(HotelSaveRequest hotelSaveRequest) throws IOException {
+    public void saveHotel(HotelSaveRequest hotelSaveRequest, MultipartFile[] multipartFile) throws IOException {
         // Map the hotelSaveRequest to a Hotel entity
         Hotel hotel = modelMapper.map(hotelSaveRequest, Hotel.class);
 
@@ -67,7 +68,7 @@ public class HotelService {
         // Save all room instances
         roomRepository.saveAll(roomInstances);
 
-        fileService.saveFiles(hotelSaveRequest.getImages(),hotel);
+        fileService.saveFiles(multipartFile,hotel);
 
         // Optionally update the hotel with the room references (if needed)
         hotel.setRooms(roomInstances);

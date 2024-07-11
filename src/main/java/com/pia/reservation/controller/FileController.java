@@ -25,7 +25,7 @@ public class FileController {
     private FileService fileService;
 
 
-    @PostMapping("")
+    /*@PostMapping("")
     public ResponseEntity saveFiles(
             @RequestParam("files") MultipartFile [] multipartFiles, @RequestParam("hotel_id") Long hotelId){
         try {
@@ -34,7 +34,7 @@ public class FileController {
         } catch (IOException e) {
             return ResponseEntity.status(500).body(null);
         }
-    }
+    }*/
 
     @GetMapping("/{hotel_id}")
     public ResponseEntity<List<FileResponse>> getFiles(@PathVariable Long hotel_id) throws IOException {
