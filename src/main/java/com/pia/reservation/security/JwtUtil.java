@@ -1,9 +1,13 @@
 package com.pia.reservation.security;
 
+import com.pia.reservation.model.auth.User;
+import com.pia.reservation.service.UserService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
@@ -15,6 +19,9 @@ import java.util.function.Function;
 public class JwtUtil {
 
     private String secret = "secret";
+
+    @Autowired
+    public UserService userService;
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -37,9 +44,15 @@ public class JwtUtil {
         return extractExpiration(token).before(new Date());
     }
 
-    public String generateToken(UserDetails userDetails) {
+    public String generateToken(UserDetails userDetails) throws Exception {
         Map<String, Object> claims = new HashMap<>();
-        return createToken(claims, userDetails.getUsername());
+        UserDetails user = userService.findByUsername(userDetails.getUsername());
+        // Tüm kullanıcı bilgilerini claims içerisine ekle
+        claims.put("username", user.getUsername());
+        claims.put("authorities", user.getAuthorities());
+        // Eğer userDetails içinde başka alanlar varsa onları da ekleyin
+        // claims.put("email", user.getEmail()); gibi...
+        return createToken(claims, user.getUsername());
     }
 
     private String createToken(Map<String, Object> claims, String subject) {
