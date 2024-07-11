@@ -16,6 +16,9 @@ import java.util.List;
 @AllArgsConstructor
 public class HotelResponse {
 
+    @Schema(description = "Hotel's id", example = "1")
+    private Integer hotel_id;
+
     @Schema(description = "Hotel's name", example = "Grand Plaza")
     private String name;
 
