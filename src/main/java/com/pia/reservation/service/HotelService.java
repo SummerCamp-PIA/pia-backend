@@ -116,6 +116,10 @@ public class HotelService {
         return hotelResponse;
     }
 
+    public Hotel getHotel(Long id){
+        return hotelRepository.findById(id).orElseThrow();
+    }
+
     /*public HotelDetailResponse getHotel(Long hotelId, Date startDate, Date endDate){
        Hotel hotel =  hotelRepository.findById(hotelId).orElseThrow();
 
