@@ -35,5 +35,5 @@ public class HotelResponse {
     private Integer avgScore;
 
     private Integer totalPrice;
-
+    private List<String> roomsType;
 }

@@ -1,6 +1,8 @@
 package com.pia.reservation.model;
 
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.pia.reservation.dto.request.SubDto.HotelSaveLocationDto;
 import jakarta.persistence.*;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.AllArgsConstructor;

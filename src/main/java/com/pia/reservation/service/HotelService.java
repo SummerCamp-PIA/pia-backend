@@ -14,9 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.pia.reservation.util.ModelMapperUtil.modelMapper;
@@ -94,9 +92,11 @@ public class HotelService {
             Integer roomPrice = roomRepository.findMinPriceByHotelId(hotel_id);
             System.out.println("Room Price: " + roomPrice);
 
-            int accomudationprice = hotels.get(i).getAccomudatipnTypePrice();
-            System.out.println("Accommodation Price: " + accomudationprice);
-            hotelResponse.get(i).setTotalPrice((int) (accomudationprice + roomPrice));
+            Integer accomudationPrice = hotels.get(i).getAccomudatipnTypePrice();
+            int finalAccomudationPrice = (accomudationPrice != null) ? accomudationPrice : 0;
+
+            System.out.println("Accommodation Price: " + finalAccomudationPrice);
+            hotelResponse.get(i).setTotalPrice((int) (finalAccomudationPrice + roomPrice));
         }
         return hotelResponse;
     }
@@ -104,16 +104,20 @@ public class HotelService {
     public HotelResponse getHotelById(Long id){
 
         Hotel hotel = hotelRepository.findById(id).orElseThrow();
-
-
         List<RoomDto> roomDtos = new ArrayList<>();
+
+
+        List<RoomDto> roomDtos1 = new ArrayList<>();
+        Set<String> roomTypesSet = new HashSet<>();
         for(Room room : hotel.getRooms()){
-            roomDtos.add(modelMapper.map(room, RoomDto.class));
+
+            RoomDto roomDto = modelMapper.map(room, RoomDto.class);
+            roomDtos.add(roomDto);
+            roomTypesSet.add(roomDto.getRoomType());
         }
 
         HotelResponse hotelResponse = modelMapper.map(hotel, HotelResponse.class);
-//        hotelResponse.setTotalPrice(roomDtos.get(1).getRoomPrice());
-
+        hotelResponse.setRoomsType(new ArrayList<>(roomTypesSet)); // Convert Set to List and set room types
         return hotelResponse;
 
     }
