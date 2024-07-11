@@ -1,17 +1,17 @@
 package com.pia.reservation.dto.request.SubDto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@AllArgsConstructor
+@NoArgsConstructor
 @Data
 @Builder
 public class HotelSaveLocationDto {
-
-    private String city;
-    @JsonProperty("district")
-    private String state;
     private String country;
-
-    private String address;
+    private String city;
+    private String state;
+    private String Address;
 }
