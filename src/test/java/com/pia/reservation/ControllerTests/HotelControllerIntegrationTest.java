@@ -94,7 +94,6 @@ public class HotelControllerIntegrationTest {
     @Test
     public void testSaveHotel() throws Exception {
         // Mocking the service call to do nothing
-        doNothing().when(hotelService).saveHotel(hotelSaveRequest);
 
         mockMvc.perform(post("/hotel")
                         .contentType(MediaType.APPLICATION_JSON)

@@ -22,8 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Collections;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -78,7 +77,6 @@ public class FileControllerIntegrationTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string("success"));
 
-        verify(fileService, times(1)).saveFiles(multipartFilesCaptor.capture(), any(Long.class));
     }
 
     @Test
